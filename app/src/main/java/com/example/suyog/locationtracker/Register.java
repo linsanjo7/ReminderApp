@@ -89,9 +89,10 @@ public class Register extends Fragment {
                                 Users user=new Users("suyog","9820641815","Maha","india");
                                 userReference=FirebaseDatabase.getInstance().getReference();
                                 userReference.child("appusers").child(auth.getCurrentUser().getUid()).setValue(user);
-                                Intent intent=new Intent(getActivity(),AddRemainder.class);
-                                getActivity().startActivity(intent);
-                                getActivity().finish();
+
+                                Intent intent=new Intent((MainActivity)getActivity(),Reminder.class);
+                                ((MainActivity)getActivity()).startActivity(intent);
+                                ((MainActivity)getActivity()).finish();
                             }
                             else{
                                 progressDialog.dismiss();

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by SUYOG on 9/8/2017.
@@ -45,6 +51,7 @@ public class Login extends Fragment {
         loginPassword=(EditText) view.findViewById(R.id.loginPassword);
         loginbtn=(Button) view.findViewById(R.id.loginbtn);
         already=(TextView) view.findViewById(R.id.linksignup);
+
         already.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,7 +59,6 @@ public class Login extends Fragment {
                 ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,new Register())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
-
             }
         });
 
@@ -81,9 +87,10 @@ public class Login extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Intent i=new Intent(getActivity(), AddRemainder.class);
-                                getActivity().startActivity(i);
-                                getActivity().finish();
+
+                                Intent i=new Intent((MainActivity)getActivity(), Reminder.class);
+                                ((MainActivity)getActivity()).startActivity(i);
+                                ((MainActivity)getActivity()).finish();
 
                             }
                             else{

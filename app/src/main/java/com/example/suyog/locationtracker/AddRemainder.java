@@ -4,12 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,7 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
-public class AddRemainder extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
+
+public class AddRemainder extends Fragment {
 
     TextView placename;
     TextView placeadd;
@@ -42,31 +48,30 @@ public class AddRemainder extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_remainder);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view =inflater.inflate(R.layout.activity_add_remainder,container,false);
 
 
         auth=FirebaseAuth.getInstance();
         remaindersDatabase = FirebaseDatabase.getInstance().getReference();
-        progressDialog=new ProgressDialog(this);
-        placeadd=(TextView) findViewById(R.id.placeadd);
-        placename=(TextView) findViewById(R.id.placename);
-        remainderName=(EditText) findViewById(R.id.remainderName);
-        remainderDate=(EditText) findViewById(R.id.remainderDate);
-        remainderTime=(EditText) findViewById(R.id.remainderTime);
-        setRemainder=(Button) findViewById(R.id.setRemainder);
-        getLocation=(Button)findViewById(R.id.getadd);
-        logout=(Button) findViewById(R.id.logout);
+        progressDialog=new ProgressDialog(getActivity());
+        placeadd=(TextView) view.findViewById(R.id.placeadd);
+        placename=(TextView) view.findViewById(R.id.placename);
+        remainderName=(EditText) view.findViewById(R.id.remainderName);
+        remainderDate=(EditText) view.findViewById(R.id.remainderDate);
+        remainderTime=(EditText) view.findViewById(R.id.remainderTime);
+        setRemainder=(Button) view.findViewById(R.id.setRemainder);
+        getLocation=(Button) view.findViewById(R.id.getadd);
+        logout=(Button) view.findViewById(R.id.logout);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressDialog.setMessage("Signing Out");
                 auth.signOut();
-                finish();
-                Intent intent=new Intent(getApplicationContext() ,MainActivity.class);
-                startActivity(intent);
+                getActivity().finish();
+                Intent intent=new Intent((Reminder)getActivity() ,MainActivity.class);
+                getActivity().startActivity(intent);
                 //setActionBarTitle("Login");
             }
         });
@@ -79,7 +84,7 @@ public class AddRemainder extends AppCompatActivity {
             public void onClick(View view) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
-                    Intent intent = builder.build(AddRemainder.this);
+                    Intent intent = builder.build(getActivity());
                     startActivityForResult(intent, PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
@@ -106,7 +111,7 @@ public class AddRemainder extends AppCompatActivity {
 
 
 
-
+    return  view;
     }
 
     private void addRemainder() {
@@ -116,36 +121,29 @@ public class AddRemainder extends AppCompatActivity {
         String pname=placename.getText().toString().trim();
         String padd=placeadd.getText().toString().trim();
 
-       /* String pname="jshjdhsdjhs";
-        String padd="jdhfjdhffjfdhfjfhfjsfjhdjsfsjfdbdfjshjfhfdjfhjhsjhfjsjhjfs mdffjshfsj";*/
+/*
+       String pname="jshjdhsdjhs";
+        String padd="jdhfjdhffjfdhfjfhfjsfjhdjsfsjfdbdfjshjfhfdjfhjhsjhfjsjhjfs mdffjshfsj";
+*/
         if(!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd)) {
 
-            Remainder remainder = new Remainder();
-            remainder.setRemianderName(rname);
-            remainder.setRemainderTime(rtime);
-            remainder.setRemainderDate(rdate);
-            remainder.setLatitude(latitude);
-            remainder.setLogitude(logitude);
-            remainder.setPlacename(pname);
-            remainder.setPlaceaddress(padd);
-
+            Remainder remainder = new Remainder(rname,rdate,rtime,pname,padd,logitude,latitude);
             String id=remaindersDatabase.push().getKey();
-            remainder.setId(id);
             remaindersDatabase.child("appusers").child(auth.getCurrentUser().getUid()).child("remainder").child(id).setValue(remainder);
         }
         else{
-            Toast.makeText(this, "Enter valid Details", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Enter valid Details", Toast.LENGTH_LONG).show();
         }
 
     }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(AddRemainder.this, data);
+                Place place = PlacePicker.getPlace(getActivity(), data);
                 placename.setText(place.getName());
                 placeadd.setText(place.getAddress());
                 logitude = place.getLatLng().longitude;

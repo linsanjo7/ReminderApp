@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         auth=FirebaseAuth.getInstance();
         if(auth.getCurrentUser() != null){
             finish();
-            Intent intent=new Intent(this,AddRemainder.class);
+            Intent intent=new Intent(MainActivity.this,Reminder.class);
             startActivity(intent);
 
         }
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setActionBarTitle(String title){
+
         getSupportActionBar().setTitle(title);
     }
 
