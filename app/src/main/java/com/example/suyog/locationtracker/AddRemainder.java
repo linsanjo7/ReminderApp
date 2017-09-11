@@ -2,14 +2,10 @@ package com.example.suyog.locationtracker;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +22,6 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,7 +64,7 @@ public class AddRemainder extends Fragment {
                 progressDialog.setMessage("Signing Out");
                 auth.signOut();
                 getActivity().finish();
-                Intent intent=new Intent((Reminder)getActivity() ,MainActivity.class);
+                Intent intent=new Intent((ReminderActivity)getActivity() ,MainActivity.class);
                 getActivity().startActivity(intent);
                 //setActionBarTitle("Login");
             }
@@ -127,9 +121,10 @@ public class AddRemainder extends Fragment {
 */
         if(!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd)) {
 
-            Remainder remainder = new Remainder(rname,rdate,rtime,pname,padd,logitude,latitude);
             String id=remaindersDatabase.push().getKey();
-            remaindersDatabase.child("appusers").child(auth.getCurrentUser().getUid()).child("remainder").child(id).setValue(remainder);
+            Reminder reminder = new Reminder(id,rname,rdate,rtime,pname,padd,logitude,latitude);
+
+            remaindersDatabase.child("appusers").child(auth.getCurrentUser().getUid()).child("reminder").child(id).setValue(reminder);
         }
         else{
             Toast.makeText(getActivity(), "Enter valid Details", Toast.LENGTH_LONG).show();

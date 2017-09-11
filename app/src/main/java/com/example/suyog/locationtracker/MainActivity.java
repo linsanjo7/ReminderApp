@@ -1,14 +1,8 @@
 package com.example.suyog.locationtracker;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -23,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         auth=FirebaseAuth.getInstance();
         if(auth.getCurrentUser() != null){
             finish();
-            Intent intent=new Intent(MainActivity.this,Reminder.class);
+            Intent intent=new Intent(MainActivity.this,ReminderActivity.class);
             startActivity(intent);
 
         }
