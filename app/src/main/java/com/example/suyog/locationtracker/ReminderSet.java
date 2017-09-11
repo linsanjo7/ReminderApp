@@ -22,15 +22,20 @@ public class ReminderSet
     private ReminderSet(Context context)
     {
         mReminders = new ArrayList<>();
+
+    }
+
+    public void addReminder(Reminder r) {
+        mReminders.add(r);
     }
 
     public List<Reminder> getReminders() {
         return mReminders;
     }
     public Reminder getReminder(String key) {
-        for (Reminder crime : mReminders) {
-            if (crime.getKey().equals(key)) {
-                return crime;
+        for (Reminder reminder : mReminders) {
+            if (reminder.getKey().equals(key)) {
+                return reminder;
             }
         }
         return null;
