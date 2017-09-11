@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by SUYOG on 9/9/2017.
+ * Created by Hardik on 9/9/2017.
  */
 
 public class ReminderListFragment extends Fragment
