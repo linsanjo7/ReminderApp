@@ -6,4 +6,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="my_reminder">My Reminder</string>
+    <string name="matunga">Matunga</string>
+    <string name="_6_00pm">6:00pm</string>
 </resources>

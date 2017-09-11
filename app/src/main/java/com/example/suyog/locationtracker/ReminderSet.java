@@ -22,6 +22,11 @@ public class ReminderSet
     private ReminderSet(Context context)
     {
         mReminders = new ArrayList<>();
+
+    }
+
+    public void addReminder(Reminder r) {
+        mReminders.add(r);
     }
 
     public List<Reminder> getReminders() {
