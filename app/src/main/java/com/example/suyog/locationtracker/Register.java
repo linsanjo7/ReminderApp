@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +20,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -98,7 +96,7 @@ public class Register extends Fragment {
                                 userReference=FirebaseDatabase.getInstance().getReference();
                                 userReference.child("appusers").child(auth.getCurrentUser().getUid()).setValue(user);
 
-                                Intent intent=new Intent((MainActivity)getActivity(),Reminder.class);
+                                Intent intent=new Intent((MainActivity)getActivity(),ReminderActivity.class);
                                 ((MainActivity)getActivity()).startActivity(intent);
                                 ((MainActivity)getActivity()).finish();
                             }
