@@ -28,9 +28,9 @@ public class ReminderSet
         return mReminders;
     }
     public Reminder getReminder(String key) {
-        for (Reminder crime : mReminders) {
-            if (crime.getKey().equals(key)) {
-                return crime;
+        for (Reminder reminder : mReminders) {
+            if (reminder.getKey().equals(key)) {
+                return reminder;
             }
         }
         return null;
