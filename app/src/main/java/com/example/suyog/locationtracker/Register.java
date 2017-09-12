@@ -33,7 +33,11 @@ public class Register extends Fragment {
     private EditText registerEmail;
     private EditText registerPassword;
     private Button registerbtn;
-    private TextView already;
+    private Button already;
+    private EditText registerName;
+    private EditText registerPhoneno;
+    private EditText registerLocation;
+
     FirebaseAuth auth;
     ProgressDialog progressDialog;
     DatabaseReference userReference;
@@ -49,7 +53,10 @@ public class Register extends Fragment {
         registerEmail=(EditText) view.findViewById(R.id.registerEmail);
         registerPassword=(EditText) view.findViewById(R.id.registerPassword);
         registerbtn=(Button) view.findViewById(R.id.registerbtn);
-        already=(TextView) view.findViewById(R.id.linksignin);
+        already=(Button) view.findViewById(R.id.linksignin);
+        registerName=(EditText) view.findViewById(R.id.registername);
+        registerPhoneno=(EditText) view.findViewById(R.id.registerPhone);
+        registerLocation=(EditText) view.findViewById(R.id.registerCountry);
 
         already.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,16 +74,17 @@ public class Register extends Fragment {
             public void onClick(View view) {
                 String email=registerEmail.getText().toString().trim();
                 String pass=registerPassword.getText().toString().trim();
+                final String name=registerName.getText().toString().trim();
+                final String phone=registerPhoneno.getText().toString().trim();
+                final String country=registerLocation.getText().toString().trim();
 
-                if(TextUtils.isEmpty(email)) {
-                    Toast.makeText(getActivity() , "Enter Valid Email" ,Toast.LENGTH_LONG ).show();
+
+                if(TextUtils.isEmpty(email) || TextUtils.isEmpty(pass) ||TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) || TextUtils.isEmpty(country)) {
+                    Toast.makeText(getActivity() , "Fill All Fields" ,Toast.LENGTH_LONG ).show();
                     return;
                 }
 
-                if(TextUtils.isEmpty(pass)) {
-                    Toast.makeText(getActivity() , "Enter Valid password" ,Toast.LENGTH_LONG ).show();
-                    return;
-                }
+
 
                 progressDialog.setMessage("Registering User...");
                 progressDialog.show();
@@ -86,7 +94,7 @@ public class Register extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Users user=new Users("suyog","9820641815","Maha","india");
+                                Users user=new Users(name,phone,country);
                                 userReference=FirebaseDatabase.getInstance().getReference();
                                 userReference.child("appusers").child(auth.getCurrentUser().getUid()).setValue(user);
 

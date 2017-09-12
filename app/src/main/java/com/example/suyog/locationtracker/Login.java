@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,8 @@ public class Login extends Fragment {
     private EditText loginEmail;
     private EditText loginPassword;
     private Button loginbtn;
-    private TextView already;
+    private Button already;
+    ScrollView scrollView;
     FirebaseAuth auth;
     ProgressDialog progresDialog;
     @Nullable
@@ -50,7 +52,7 @@ public class Login extends Fragment {
         loginEmail=(EditText) view.findViewById(R.id.loginEmail);
         loginPassword=(EditText) view.findViewById(R.id.loginPassword);
         loginbtn=(Button) view.findViewById(R.id.loginbtn);
-        already=(TextView) view.findViewById(R.id.linksignup);
+        already=(Button) view.findViewById(R.id.linksignup);
 
         already.setOnClickListener(new View.OnClickListener() {
             @Override

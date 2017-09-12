@@ -7,17 +7,16 @@ package com.example.suyog.locationtracker;
 public class Users {
     public String name;
     public String mobNo;
-    public String state;
+
     public String country;
 
     public Users(){
 
     }
 
-    public Users(String name, String mobNo, String state, String country) {
+    public Users(String name, String mobNo, String country) {
         this.name = name;
         this.mobNo = mobNo;
-        this.state = state;
         this.country = country;
     }
 
@@ -29,9 +28,6 @@ public class Users {
         return mobNo;
     }
 
-    public String getState() {
-        return state;
-    }
 
     public String getCountry() {
         return country;

@@ -20,22 +20,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         auth=FirebaseAuth.getInstance();
         if(auth.getCurrentUser() != null){
-            finish();
+
             Intent intent=new Intent(MainActivity.this,Reminder.class);
             startActivity(intent);
+            finish();
 
         }
 
         getSupportFragmentManager().beginTransaction().add(R.id.container,new Login(),"Log In").commit();
         setActionBarTitle("Login");
-
     }
 
     public void setActionBarTitle(String title){
-
         getSupportActionBar().setTitle(title);
     }
-
 }
