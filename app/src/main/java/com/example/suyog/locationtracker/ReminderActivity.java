@@ -1,14 +1,10 @@
 package com.example.suyog.locationtracker;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class ReminderActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,6 +38,7 @@ public class ReminderActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
+        //ReminderSet reminderSet=ReminderSet.get(getApplicationContext());
 
         auth=FirebaseAuth.getInstance();
         DatabaseReference userReference= FirebaseDatabase.getInstance().getReference("appusers").child(auth.getCurrentUser().getUid());
@@ -108,25 +106,29 @@ public class ReminderActivity extends AppCompatActivity
         if (id == R.id.setremainder) {
             // Handle the camera action
             getSupportFragmentManager().beginTransaction().replace(R.id.content,new AddRemainder())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.viewremainder) {
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.content,new ViewReminder())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            getSupportFragmentManager().beginTransaction().replace(R.id.content,new ReminderListFragment())
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.myprofile) {
 
             getSupportFragmentManager().beginTransaction().replace(R.id.content,new MyProfile())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.deleteremainder) {
 
             getSupportFragmentManager().beginTransaction().replace(R.id.content,new DeleteRemainder())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
                     .commit();
 
         } else if (id == R.id.loggingout) {

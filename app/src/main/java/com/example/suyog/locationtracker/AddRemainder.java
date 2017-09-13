@@ -123,8 +123,9 @@ public class AddRemainder extends Fragment {
 
             String id=remaindersDatabase.push().getKey();
             Reminder reminder = new Reminder(id,rname,rdate,rtime,pname,padd,logitude,latitude);
+            ReminderSet rs = ReminderSet.get(getActivity());
+            rs.addReminder(reminder);
 
-            remaindersDatabase.child("appusers").child(auth.getCurrentUser().getUid()).child("reminder").child(id).setValue(reminder);
         }
         else{
             Toast.makeText(getActivity(), "Enter valid Details", Toast.LENGTH_LONG).show();

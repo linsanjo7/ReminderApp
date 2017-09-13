@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,8 @@ public class Login extends Fragment {
 
                 progresDialog.setMessage("Signing In");
                 progresDialog.show();
+                Log.d("myemail: ",email);
+                Log.d("mypassword ",pass);
                 auth.signInWithEmailAndPassword(email,pass)
                     .addOnCompleteListener(getActivity(),new OnCompleteListener<AuthResult>() {
                         @Override
