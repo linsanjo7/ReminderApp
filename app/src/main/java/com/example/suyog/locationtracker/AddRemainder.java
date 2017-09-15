@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,16 +28,15 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddRemainder extends Fragment {
 
-    TextView placename;
-    TextView placeadd;
-    EditText remainderName;
-    EditText remainderDate;
-    EditText remainderTime;
-    Button setRemainder;
-    Button getLocation;
-    Button logout;
-    double logitude = 0, latitude = 0;
-    DatabaseReference remaindersDatabase;
+    private TextView placename;
+    private TextView placeadd;
+    private EditText remainderName;
+    private EditText remainderDate;
+    private EditText remainderTime;
+    private Button setRemainder;
+    private Button getLocation;
+    private double logitude = 0, latitude = 0;
+    private DatabaseReference remaindersDatabase;
     private static final int PLACE_PICKER_REQUEST = 1;
     FirebaseAuth auth;
     ProgressDialog progressDialog;
@@ -56,22 +56,6 @@ public class AddRemainder extends Fragment {
         remainderTime=(EditText) view.findViewById(R.id.remainderTime);
         setRemainder=(Button) view.findViewById(R.id.setRemainder);
         getLocation=(Button) view.findViewById(R.id.getadd);
-        logout=(Button) view.findViewById(R.id.logout);
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog.setMessage("Signing Out");
-                auth.signOut();
-                getActivity().finish();
-                Intent intent=new Intent((ReminderActivity)getActivity() ,MainActivity.class);
-                getActivity().startActivity(intent);
-                //setActionBarTitle("Login");
-            }
-        });
-
-
-
 
         getLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +109,11 @@ public class AddRemainder extends Fragment {
             Reminder reminder = new Reminder(id,rname,rdate,rtime,pname,padd,logitude,latitude);
             ReminderSet rs = ReminderSet.get(getActivity());
             rs.addReminder(reminder);
+            Toast.makeText(getActivity(),"Reminder Added",Toast.LENGTH_LONG);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content , new ReminderListFragment())
+                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                         .addToBackStack(null)
+                         .commit();
 
         }
         else{

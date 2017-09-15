@@ -59,9 +59,9 @@ public class Register extends Fragment {
         already.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).setActionBarTitle("Login");
+
                 ((MainActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,new Login())
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
 
             }

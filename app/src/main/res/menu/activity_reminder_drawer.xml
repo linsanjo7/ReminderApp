@@ -11,10 +11,6 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="View Remainder" />
         <item
-            android:id="@+id/deleteremainder"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Delete Remainder" />
-        <item
             android:id="@+id/myprofile"
             android:icon="@drawable/ic_menu_manage"
             android:title="Profile" />

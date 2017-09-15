@@ -124,13 +124,6 @@ public class ReminderActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commit();
 
-        } else if (id == R.id.deleteremainder) {
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.content,new DeleteRemainder())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack(null)
-                    .commit();
-
         } else if (id == R.id.loggingout) {
 
             progressDialog.setMessage("Signing Out");
