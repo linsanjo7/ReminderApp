@@ -29,8 +29,6 @@ public class ReminderSet
         if (sReminderSet== null) {
             sReminderSet = new ReminderSet(context);
         }
-        Log.d("in suyog: ","suyog");
-
         return sReminderSet;
     }
 
@@ -46,7 +44,6 @@ public class ReminderSet
 
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     Reminder reminder=d.getValue(Reminder.class);
-                    Log.d("remindersuyog: ",reminder.getPlacename().toString());
                     mReminders.add(reminder);
                 }
             }
@@ -69,8 +66,6 @@ public class ReminderSet
     }
 
     public List<Reminder> getReminders() {
-
-        Log.d("in suyoggetReminders: ","suyog");
 
         return mReminders;
     }
