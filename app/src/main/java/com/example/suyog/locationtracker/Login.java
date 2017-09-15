@@ -77,8 +77,7 @@ public class Login extends Fragment {
 
                 progresDialog.setMessage("Signing In");
                 progresDialog.show();
-                Log.d("myemail: ",email);
-                Log.d("mypassword ",pass);
+
                 auth.signInWithEmailAndPassword(email,pass)
                     .addOnCompleteListener(getActivity(),new OnCompleteListener<AuthResult>() {
                         @Override
