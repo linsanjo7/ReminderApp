@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,11 +54,12 @@ public class ReminderListFragment extends Fragment
             mLocationTextView = (TextView) itemView.findViewById(R.id.location);
         }
 
-        public void bind(Reminder r)
-        {
+        public void bind(Reminder r){
             mReminder = r;
-            mCaptionTextView.setText(mReminder.getRemianderName());
-            mTimeTextView.setText(mReminder.getRemainderTime());
+            mCaptionTextView.setText(mReminder.getReminderName());
+            /*Date date=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(mReminder.getReminderStartTime());
+            Log.d("Only Date", String.valueOf(date.getDate())); */
+            mTimeTextView.setText(mReminder.getReminderStartTime());
             mLocationTextView.setText(mReminder.getPlacename());
         }
     }
@@ -78,10 +83,11 @@ public class ReminderListFragment extends Fragment
         }
 
         @Override
-        public void onBindViewHolder(ReminderHolder holder, int position)
-        {
+        public void onBindViewHolder(ReminderHolder holder, int position) {
             Reminder reminder = mReminders.get(position);
-            holder.bind(reminder);
+                holder.bind(reminder);
+
+
         }
 
         @Override
@@ -93,10 +99,9 @@ public class ReminderListFragment extends Fragment
     }
 
     private void updateUI() {
+        Log.d("Here1:","UpdateUI()");
         ReminderSet reminderSet = ReminderSet.get(getActivity());
         List<Reminder> reminders = reminderSet.getReminders();
-
-
         mAdapter = new ReminderAdapter(reminders);
         mReminderRecyclerView.setAdapter(mAdapter);
     }

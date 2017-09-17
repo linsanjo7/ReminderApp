@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +39,6 @@ public class ReminderActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
-        //ReminderSet reminderSet=ReminderSet.get(getApplicationContext());
 
         auth=FirebaseAuth.getInstance();
         DatabaseReference userReference= FirebaseDatabase.getInstance().getReference("appusers").child(auth.getCurrentUser().getUid());
@@ -128,6 +128,8 @@ public class ReminderActivity extends AppCompatActivity
 
             progressDialog.setMessage("Signing Out");
             auth.signOut();
+            ReminderSet.cleanReminder();
+
             finish();
             Intent intent=new Intent(this ,MainActivity.class);
             startActivity(intent);

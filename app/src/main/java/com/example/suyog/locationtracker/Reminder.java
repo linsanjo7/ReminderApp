@@ -9,19 +9,20 @@ import java.util.Date;
 public class Reminder
 {
     String key;
-    String remianderName;
-    String remainderDate;
-    String remainderTime;
+    String reminderName;
+
+    String reminderStartTime;
+    String reminderEndTime;
     String placename;
     String placeaddress;
     Double latitude;
     Double logitude;
 
-    public Reminder(String key,String remianderName, String remainderDate, String remainderTime, String placename, String placeaddress, Double latitude, Double logitude) {
+    public Reminder(String key,String reminderName, String reminderStartTime,String reminderEndTime ,String placename, String placeaddress, Double latitude, Double logitude) {
         this.key = key;
-        this.remianderName = remianderName;
-        this.remainderDate = remainderDate;
-        this.remainderTime = remainderTime;
+        this.reminderName = reminderName;
+        this.reminderStartTime = reminderStartTime;
+        this.reminderEndTime = reminderEndTime;
         this.placename = placename;
         this.placeaddress = placeaddress;
         this.latitude = latitude;
@@ -31,26 +32,22 @@ public class Reminder
     public Reminder() {
     }
 
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
-    public void setKey(String key)
-    {
-        this.key = key;
+    public String getReminderName() {
+        return reminderName;
     }
 
-    public String getRemianderName() {
-        return remianderName;
+
+
+    public String getReminderStartTime() {
+        return reminderStartTime;
     }
 
-    public String getRemainderDate() {
-        return remainderDate;
-    }
-
-    public String getRemainderTime() {
-        return remainderTime;
+    public String getReminderEndTime() {
+        return reminderEndTime;
     }
 
     public String getPlacename() {

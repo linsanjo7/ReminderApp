@@ -2,6 +2,7 @@ package com.example.suyog.locationtracker;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,31 +33,30 @@ public class ReminderSet
         return sReminderSet;
     }
 
-    public ReminderSet(Context context)
-    {
-
+    public ReminderSet(final Context context) {
         mReminders = new ArrayList<>();
-        mAuth=FirebaseAuth.getInstance();
-        mReminderRef=FirebaseDatabase.getInstance().getReference();
-        mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).child("reminder").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        mAuth = FirebaseAuth.getInstance();
+        mReminderRef = FirebaseDatabase.getInstance().getReference();
+            mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot d : dataSnapshot.child("reminder").getChildren()) {
 
-                for(DataSnapshot d : dataSnapshot.getChildren()){
-                    Reminder reminder=d.getValue(Reminder.class);
-                    mReminders.add(reminder);
+                        Reminder reminder = d.getValue(Reminder.class);
+                        mReminders.add(reminder);
+
+
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
 
 
+        }
 
-    }
 
     public void addReminder(Reminder r) {
         mAuth=FirebaseAuth.getInstance();
@@ -79,4 +79,12 @@ public class ReminderSet
         return null;
     }
 
+    public  void deleteReminders() {
+
+        mReminders.clear();
+    }
+
+    public static void cleanReminder() {
+            sReminderSet=null;
+    }
 }
