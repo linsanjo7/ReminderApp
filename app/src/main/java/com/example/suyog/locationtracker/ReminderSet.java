@@ -42,6 +42,7 @@ public class ReminderSet
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot)
                 {
+
                     deleteReminders();
                     for (DataSnapshot d : dataSnapshot.child("reminder").getChildren())
                     {
