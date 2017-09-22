@@ -3,6 +3,8 @@ package com.example.suyog.locationtracker;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +41,7 @@ public class ReminderListFragment extends Fragment
         return view;
     }
 
-    private class ReminderHolder extends RecyclerView.ViewHolder
+    private class ReminderHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         private TextView mCaptionTextView;
         private TextView mTimeTextView;
@@ -52,6 +55,7 @@ public class ReminderListFragment extends Fragment
             mCaptionTextView = (TextView) itemView.findViewById(R.id.caption);
             mTimeTextView = (TextView) itemView.findViewById(R.id.time);
             mLocationTextView = (TextView) itemView.findViewById(R.id.location);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Reminder r){
@@ -61,6 +65,21 @@ public class ReminderListFragment extends Fragment
             Log.d("Only Date", String.valueOf(date.getDate())); */
             mTimeTextView.setText(mReminder.getReminderStartTime());
             mLocationTextView.setText(mReminder.getPlacename());
+        }
+
+        @Override
+        public void onClick(View view)
+        {
+            Toast.makeText(getContext(),"ArrayList Index "+getAdapterPosition(),Toast.LENGTH_LONG);
+
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            Bundle args = new Bundle();
+            args.putSerializable("REMINDERID",new Integer(getAdapterPosition()));
+            ViewReminderFragment fragment = new ViewReminderFragment();
+            fragment.setArguments(args);
+            fragmentManager.beginTransaction().replace(R.id.content,fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack("ListView").commit();
+
         }
     }
 
