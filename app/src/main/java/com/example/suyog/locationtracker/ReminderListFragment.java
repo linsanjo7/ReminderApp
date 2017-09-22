@@ -112,7 +112,7 @@ public class ReminderListFragment extends Fragment
     }
 
     private void updateUI() {
-        Log.d("Here1:","UpdateUI()");
+        
         ReminderSet reminderSet = ReminderSet.get(getActivity());
         List<Reminder> reminders = reminderSet.getReminders();
         mAdapter = new ReminderAdapter(reminders);

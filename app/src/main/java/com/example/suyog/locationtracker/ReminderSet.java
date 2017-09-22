@@ -26,6 +26,7 @@ public class ReminderSet
     private static ReminderSet sReminderSet;
     DatabaseReference mReminderRef;
     FirebaseAuth  mAuth;
+
     public static ReminderSet get(Context context) {
         if (sReminderSet== null) {
             sReminderSet = new ReminderSet(context);
@@ -33,19 +34,20 @@ public class ReminderSet
         return sReminderSet;
     }
 
-    public ReminderSet(final Context context) {
+   private ReminderSet(final Context context) {
         mReminders = new ArrayList<>();
         mAuth = FirebaseAuth.getInstance();
         mReminderRef = FirebaseDatabase.getInstance().getReference();
             mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mReminders.clear();
-                    for (DataSnapshot d : dataSnapshot.child("reminder").getChildren()) {
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+
+                    deleteReminders();
+                    for (DataSnapshot d : dataSnapshot.child("reminder").getChildren())
+                    {
                         Reminder reminder = d.getValue(Reminder.class);
                         mReminders.add(reminder);
-
-
                     }
                 }
 
@@ -84,7 +86,8 @@ public class ReminderSet
         mReminders.clear();
     }
 
-    public static void cleanReminder() {
+    public static void cleanReminder()
+    {
             sReminderSet=null;
     }
 }
