@@ -40,8 +40,8 @@ public class ReminderSet
             mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    mReminders.clear();
                     for (DataSnapshot d : dataSnapshot.child("reminder").getChildren()) {
-
                         Reminder reminder = d.getValue(Reminder.class);
                         mReminders.add(reminder);
 
