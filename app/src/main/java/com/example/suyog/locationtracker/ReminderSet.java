@@ -93,8 +93,7 @@ public class ReminderSet
 
     public void editReminder(Integer position, Reminder reminder)
     {
-        mReminders.set(position,reminder);
-        Log.e("POS",position.toString());
+
         mAuth=FirebaseAuth.getInstance();
         mReminderRef=FirebaseDatabase.getInstance().getReference();
         mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).child("reminder").child(reminder.getKey()).setValue(reminder);

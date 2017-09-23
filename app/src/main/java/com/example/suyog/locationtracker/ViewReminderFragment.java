@@ -284,11 +284,9 @@ public class ViewReminderFragment extends Fragment
         SimpleDateFormat formatter=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
         Date date=new Date();
         String rname=reminderName.getText().toString().trim();
-        String reminderEndDate=r.getReminderEndTime(),reminderStartDate=r.getReminderStartTime();
-       /*if(getDate(reminderStartTime) != null && getDate(reminderEndTime) != null ) {
-          reminderStartDate = formatter.format(getDate(reminderStartTime)).toString();
-           reminderEndDate = formatter.format(getDate(reminderEndTime)).toString();
-        }*/
+        String reminderEndDate=reminderEndTime.getText().toString();
+        String reminderStartDate=reminderStartTime.getText().toString();
+
         String pname=placename.getText().toString().trim();
         String padd=placeAddress.getText().toString().trim();
         if(!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd) && reminderEndDate !=null && reminderStartDate != null) {
