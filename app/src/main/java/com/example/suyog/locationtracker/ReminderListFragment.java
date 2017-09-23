@@ -15,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +52,7 @@ public class ReminderListFragment extends Fragment
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+
         return view;
     }
 
@@ -57,6 +61,7 @@ public class ReminderListFragment extends Fragment
         private TextView mCaptionTextView;
         private TextView mTimeTextView;
         private TextView mLocationTextView;
+        private TextView mExactTime;
         private Reminder mReminder;
 
 
@@ -66,6 +71,8 @@ public class ReminderListFragment extends Fragment
             mCaptionTextView = (TextView) itemView.findViewById(R.id.caption);
             mTimeTextView = (TextView) itemView.findViewById(R.id.time);
             mLocationTextView = (TextView) itemView.findViewById(R.id.location);
+            mExactTime = (TextView) itemView.findViewById(R.id.hhmm);
+
             itemView.setOnClickListener(this);
         }
 
@@ -75,13 +82,37 @@ public class ReminderListFragment extends Fragment
             Date date=null;
             try {
                 date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(mReminder.getReminderStartTime());
-                Log.d("Only Date", String.valueOf(date.getDate()));
-            }
-            catch(Exception e){
 
             }
-            mTimeTextView.setText(String.valueOf(date.getDate()));
+            catch(Exception e){
+                    e.printStackTrace();
+            }
+            String months[] = {"Jan", "Feb", "Mar", "Apr",
+                    "May", "Jun", "Jul", "Aug", "Sept",
+                    "Oct", "Nov", "Dec"};
+            mTimeTextView.setText(String.valueOf(date.getDate())+"-"+months[date.getMonth()]+"-"+String.valueOf(date.getYear()+1900));
             mLocationTextView.setText(mReminder.getPlacename());
+            int hour = date.getHours();
+            int minute = date.getMinutes();
+            String t="AM";
+            if(hour>=12)
+            {
+                t = "PM";
+                if(hour!=12)
+                    hour = hour % 12;
+            }
+            String h;
+            if(hour<10)
+               h = "0"+Integer.toString(hour);
+            else
+                h = Integer.toString(hour);
+            String m;
+            if(minute<10)
+                m = "0"+Integer.toString(minute);
+            else
+                m = Integer.toString(minute);
+            String exactTime = h+":"+m+" "+t;
+            mExactTime.setText(exactTime);
         }
 
         @Override

@@ -13,6 +13,9 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +46,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by Hardik on 17-Sep-17.
  */
 
-public class ViewReminderFragment extends Fragment
-{
+public class ViewReminderFragment extends Fragment {
     private EditText reminderName;
     private ReminderSet reminderSet;
     private List<Reminder> rs;
@@ -60,40 +62,40 @@ public class ViewReminderFragment extends Fragment
     private double logitude = 0, latitude = 0;
     private DatabaseReference remindersDatabase;
     private static final int PLACE_PICKER_REQUEST = 1;
-    int day,month,year,hour,minute;
-    int dayFinal,monthFinal,yearFinal,hourFinal,minuteFinal;
+    int day, month, year, hour, minute;
+    int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal;
     FirebaseAuth auth;
     ProgressDialog progressDialog;
     private Integer position;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_add_reminder, container, false);
-        position = (Integer)getArguments().getSerializable("REMINDERID");
+        position = (Integer) getArguments().getSerializable("REMINDERID");
 
         reminderSet = ReminderSet.get(getContext());
-        rs= reminderSet.getReminders();
+        rs = reminderSet.getReminders();
         r = rs.get(position);
 
 
-        reminderName=view.findViewById(R.id.reminderName);
-        reminderStartTime=view.findViewById(R.id.reminderStartTime);
-        reminderEndTime=view.findViewById(R.id.reminderEndTime);
+        reminderName = view.findViewById(R.id.reminderName);
+        reminderStartTime = view.findViewById(R.id.reminderStartTime);
+        reminderEndTime = view.findViewById(R.id.reminderEndTime);
         placeAddress = view.findViewById(R.id.placeadd);
-        placename=view.findViewById(R.id.placename);
+        placename = view.findViewById(R.id.placename);
 
         reminderStartTime.setText(r.getReminderStartTime());
         reminderEndTime.setText(r.getReminderEndTime());
         placename.setText(r.getPlacename());
         placeAddress.setText(r.getPlaceaddress());
         reminderName.setText(r.getReminderName());
-        auth= FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         remindersDatabase = FirebaseDatabase.getInstance().getReference();
-        progressDialog=new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(getActivity());
 
-        placename=(TextView) view.findViewById(R.id.placename);
-        editReminder=(Button) view.findViewById(R.id.setReminder);
-        getLocation=(Button) view.findViewById(R.id.getadd);
+        placename = (TextView) view.findViewById(R.id.placename);
+        editReminder = (Button) view.findViewById(R.id.setReminder);
+        getLocation = (Button) view.findViewById(R.id.getadd);
         editReminder.setText("Save");
 
         getLocation.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +107,7 @@ public class ViewReminderFragment extends Fragment
                     startActivityForResult(intent, PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
-                    Log.d("placepicker:","myerror1");
+                    Log.d("placepicker:", "myerror1");
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
@@ -131,8 +133,8 @@ public class ViewReminderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final int DRAWABLE_RIGHT = 2;
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (reminderStartTime.getRight() - reminderStartTime.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (reminderStartTime.getRight() - reminderStartTime.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         getStartDate();
                         return true;
                     }
@@ -145,8 +147,8 @@ public class ViewReminderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final int DRAWABLE_RIGHT = 2;
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (reminderEndTime.getRight() - reminderEndTime.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (reminderEndTime.getRight() - reminderEndTime.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
 
                         getEndDate();
                         return true;
@@ -156,112 +158,119 @@ public class ViewReminderFragment extends Fragment
             }
         });
 
+        setHasOptionsMenu(true);
 
         return view;
     }
 
-    public void getStartTime(){
-        Calendar c=Calendar.getInstance();
-        hour=c.get(Calendar.HOUR_OF_DAY);
-        minute=c.get(Calendar.MINUTE);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.view_reminder_fragment_menu, menu);
+    }
 
-        TimePickerDialog.OnTimeSetListener reminderOnTimeSetListener= new TimePickerDialog.OnTimeSetListener() {
+    public void getStartTime() {
+        Calendar c = Calendar.getInstance();
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
+
+        TimePickerDialog.OnTimeSetListener reminderOnTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                hourFinal=i;
-                minuteFinal=i1;
+                hourFinal = i;
+                minuteFinal = i1;
                 reminderStartTime.setText(dayFinal + "/" + monthFinal + "/" + yearFinal + "   " + hourFinal + ":" + minuteFinal);
 
             }
         };
 
-        TimePickerDialog timePickerDialog= new TimePickerDialog(getActivity(),reminderOnTimeSetListener ,hour,minute, DateFormat.is24HourFormat(getActivity()));
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), reminderOnTimeSetListener, hour, minute, DateFormat.is24HourFormat(getActivity()));
         timePickerDialog.show();
     }
 
-    public void getEndTime(){
+    public void getEndTime() {
 
-        Calendar c=Calendar.getInstance();
-        hour=c.get(Calendar.HOUR_OF_DAY);
-        minute=c.get(Calendar.MINUTE);
+        Calendar c = Calendar.getInstance();
+        hour = c.get(Calendar.HOUR_OF_DAY);
+        minute = c.get(Calendar.MINUTE);
 
-        TimePickerDialog.OnTimeSetListener reminderOnTimeSetListener= new TimePickerDialog.OnTimeSetListener() {
+        TimePickerDialog.OnTimeSetListener reminderOnTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                hourFinal=i;
-                minuteFinal=i1;
+                hourFinal = i;
+                minuteFinal = i1;
 
-                reminderEndTime.setText(dayFinal+"/"+monthFinal+"/"+yearFinal+"   "+hourFinal+":"+minuteFinal);
+                reminderEndTime.setText(dayFinal + "/" + monthFinal + "/" + yearFinal + "   " + hourFinal + ":" + minuteFinal);
 
             }
         };
 
-        TimePickerDialog timePickerDialog= new TimePickerDialog(getActivity(),reminderOnTimeSetListener ,hour,minute, DateFormat.is24HourFormat(getActivity()));
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), reminderOnTimeSetListener, hour, minute, DateFormat.is24HourFormat(getActivity()));
         timePickerDialog.show();
     }
 
 
-    public boolean  getStartDate(){
-        Calendar c=Calendar.getInstance();
-        year=c.get(Calendar.YEAR);
-        month=c.get(Calendar.MONTH);
-        day=c.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog.OnDateSetListener reminderOndateSetListener= new DatePickerDialog.OnDateSetListener() {
+    public boolean getStartDate() {
+        Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog.OnDateSetListener reminderOndateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                yearFinal=i;
-                monthFinal=i1+1;
-                dayFinal=i2;
+                yearFinal = i;
+                monthFinal = i1 + 1;
+                dayFinal = i2;
 
                 getStartTime();
             }
         };
 
 
-        DatePickerDialog datePickerDialog= new DatePickerDialog(getActivity(), reminderOndateSetListener,year,month,day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), reminderOndateSetListener, year, month, day);
         datePickerDialog.show();
         return true;
     }
 
 
-    public void  getEndDate(){
-        Calendar c=Calendar.getInstance();
-        year=c.get(Calendar.YEAR);
-        month=c.get(Calendar.MONTH);
-        day=c.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog.OnDateSetListener reminderOndateSetListener= new DatePickerDialog.OnDateSetListener() {
+    public void getEndDate() {
+        Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog.OnDateSetListener reminderOndateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                yearFinal=i;
-                monthFinal=i1+1;
-                dayFinal=i2;
+                yearFinal = i;
+                monthFinal = i1 + 1;
+                dayFinal = i2;
 
                 getEndTime();
 
             }
         };
-        DatePickerDialog datePickerDialog= new DatePickerDialog(getActivity(), reminderOndateSetListener,year,month,day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), reminderOndateSetListener, year, month, day);
         datePickerDialog.show();
     }
 
 
-    private Date getDate(EditText e){
-        Date rTime=new Date();
-        if(!TextUtils.isEmpty(e.getText().toString())) {
-            Log.d("viewrem:","iside if");
+    private Date getDate(EditText e) {
+        Date rTime = new Date();
+        if (!TextUtils.isEmpty(e.getText().toString())) {
+            Log.d("viewrem:", "iside if");
             String datesAndTime[] = e.getText().toString().split("   ");
-            Log.d("viewrem:","1");
+            Log.d("viewrem:", "1");
             String date[] = datesAndTime[0].toString().trim().split("/");
-            Log.d("viewrem:","2");
+            Log.d("viewrem:", "2");
             String time[] = datesAndTime[1].toString().trim().split(":");
-            Log.d("viewrem:","3");
+            Log.d("viewrem:", "3");
             //Log.d("viewrem: ",date[0]+" "+(date[1])+" "+date[3]+" "+time[0]+" "+time[1]);
-            rTime.setYear((Integer.parseInt(date[2])-1900));
+            rTime.setYear((Integer.parseInt(date[2]) - 1900));
             rTime.setDate(Integer.parseInt(date[0]));
             rTime.setMonth(Integer.parseInt(date[1]) - 1);
             rTime.setHours(Integer.parseInt(time[0]));
             rTime.setMinutes(Integer.parseInt(time[1]));
-            Log.d("viewrem:","4");
+            Log.d("viewrem:", "4");
             return rTime;
         }
         return null;
@@ -284,49 +293,56 @@ public class ViewReminderFragment extends Fragment
 
     }
 
-    public void editRemainder()
-    {
-        Log.d("viewrem:","editReminder");
+    public void editRemainder() {
+        Log.d("viewrem:", "editReminder");
 
-        SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy   HH:mm");
-        String rname=reminderName.getText().toString().trim();
-        String reminderEndDate=null,reminderStartDate=null;
-        Log.d("viewrem:","editReminder2");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy   HH:mm");
+        String rname = reminderName.getText().toString().trim();
+        String reminderEndDate = null, reminderStartDate = null;
+        Log.d("viewrem:", "editReminder2");
 
-        if(getDate(reminderStartTime) != null && getDate(reminderEndTime) != null ) {
-          reminderStartDate = formatter.format(getDate(reminderStartTime)).toString();
+        if (getDate(reminderStartTime) != null && getDate(reminderEndTime) != null) {
+            reminderStartDate = formatter.format(getDate(reminderStartTime)).toString();
             reminderEndDate = formatter.format(getDate(reminderEndTime)).toString();
-            Log.d("viewrem:","editReminder3");
+            Log.d("viewrem:", "editReminder3");
 
         }
-        Log.d("viewrem:","editReminder4");
+        Log.d("viewrem:", "editReminder4");
 
-        String pname=placename.getText().toString().trim();
-        String padd=placeAddress.getText().toString().trim();
-        Log.d("viewrem:","editReminder5");
+        String pname = placename.getText().toString().trim();
+        String padd = placeAddress.getText().toString().trim();
+        Log.d("viewrem:", "editReminder5");
 
-        if(!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd) && reminderEndDate !=null && reminderStartDate != null) {
+        if (!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd) && reminderEndDate != null && reminderStartDate != null) {
 
-            String id= r.getKey();
-            Reminder reminder = new Reminder(id,rname,reminderStartDate,reminderEndDate,pname,padd,logitude,latitude);
+            String id = r.getKey();
+            Reminder reminder = new Reminder(id, rname, reminderStartDate, reminderEndDate, pname, padd, logitude, latitude);
 
 
-            reminderSet.editReminder(position,reminder);
+            reminderSet.editReminder(position, reminder);
 
-            Toast.makeText(getActivity(),"Reminder Updated",Toast.LENGTH_LONG);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content , new ReminderListFragment())
+            Toast.makeText(getActivity(), "Reminder Updated", Toast.LENGTH_LONG);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content, new ReminderListFragment())
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
 
-        }
-
-        else{
+        } else {
             Toast.makeText(getActivity(), "Enter valid Details", Toast.LENGTH_LONG).show();
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_reminder:
+                reminderSet.deleteReminder(position);
+                getFragmentManager().popBackStack();
+                return true;
+            default:
+               return  super.onOptionsItemSelected(item);
 
 
-
+        }
+    }
 }

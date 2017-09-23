@@ -98,4 +98,12 @@ public class ReminderSet
         mReminderRef=FirebaseDatabase.getInstance().getReference();
         mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).child("reminder").child(reminder.getKey()).setValue(reminder);
     }
+
+    public void deleteReminder(Integer position)
+    {
+        Reminder temp_reminder = mReminders.get(position.intValue());
+        mReminders.remove(position.intValue());
+        mReminderRef.child("appusers").child(mAuth.getCurrentUser().getUid()).child("reminder").child(temp_reminder.getKey()).removeValue();
+
+    }
 }
