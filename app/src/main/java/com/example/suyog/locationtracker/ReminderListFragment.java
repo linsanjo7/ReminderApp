@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class ReminderListFragment extends Fragment
 
     private ReminderAdapter mAdapter;
     private RecyclerView mReminderRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -36,8 +38,17 @@ public class ReminderListFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_reminder_list, container, false);
 
         mReminderRecyclerView = (RecyclerView) view.findViewById(R.id.reminder_recycler_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeToRefresh);
         mReminderRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI();
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateUI();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
 
@@ -58,12 +69,18 @@ public class ReminderListFragment extends Fragment
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Reminder r){
+        public void bind(Reminder r)  {
             mReminder = r;
             mCaptionTextView.setText(mReminder.getReminderName());
-            /*Date date=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(mReminder.getReminderStartTime());
-            Log.d("Only Date", String.valueOf(date.getDate())); */
-            mTimeTextView.setText(mReminder.getReminderStartTime());
+            Date date=null;
+            try {
+                date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(mReminder.getReminderStartTime());
+                Log.d("Only Date", String.valueOf(date.getDate()));
+            }
+            catch(Exception e){
+
+            }
+            mTimeTextView.setText(String.valueOf(date.getDate()));
             mLocationTextView.setText(mReminder.getPlacename());
         }
 
@@ -78,7 +95,7 @@ public class ReminderListFragment extends Fragment
             ViewReminderFragment fragment = new ViewReminderFragment();
             fragment.setArguments(args);
             fragmentManager.beginTransaction().replace(R.id.content,fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack("ListView").commit();
+                    .addToBackStack("ListView").commit();
 
         }
     }
@@ -104,9 +121,7 @@ public class ReminderListFragment extends Fragment
         @Override
         public void onBindViewHolder(ReminderHolder holder, int position) {
             Reminder reminder = mReminders.get(position);
-                holder.bind(reminder);
-
-
+            holder.bind(reminder);
         }
 
         @Override
@@ -118,7 +133,7 @@ public class ReminderListFragment extends Fragment
     }
 
     private void updateUI() {
-        
+
         ReminderSet reminderSet = ReminderSet.get(getActivity());
         List<Reminder> reminders = reminderSet.getReminders();
         mAdapter = new ReminderAdapter(reminders);

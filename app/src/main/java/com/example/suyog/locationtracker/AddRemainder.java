@@ -229,7 +229,7 @@ public class AddRemainder extends Fragment {
             String datesAndTime[] = e.getText().toString().split("   ");
             String date[] = datesAndTime[0].toString().trim().split("/");
             String time[] = datesAndTime[1].toString().trim().split(":");
-            rTime.setYear(Integer.parseInt(date[2]));
+            rTime.setYear((Integer.parseInt(date[2])-1900));
             rTime.setDate(Integer.parseInt(date[0]));
             rTime.setMonth(Integer.parseInt(date[1]) - 1);
             rTime.setHours(Integer.parseInt(time[0]));
@@ -242,7 +242,7 @@ public class AddRemainder extends Fragment {
 
 
     private void addRemainder() {
-        SimpleDateFormat formatter=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy   HH:mm");
         Date date=new Date();
         String rname=reminderName.getText().toString().trim();
         String reminderEndDate=null,reminderStartDate=null;
@@ -250,6 +250,7 @@ public class AddRemainder extends Fragment {
                         reminderStartDate = formatter.format(getDate(reminderStartTime)).toString();
                         reminderEndDate = formatter.format(getDate(reminderEndTime)).toString();
                 }
+
         String pname=placename.getText().toString().trim();
         String padd=placeadd.getText().toString().trim();
         if(!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd) && reminderEndDate !=null && reminderStartDate != null) {
