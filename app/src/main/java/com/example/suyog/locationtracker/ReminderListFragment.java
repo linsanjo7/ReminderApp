@@ -58,12 +58,18 @@ public class ReminderListFragment extends Fragment
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Reminder r){
+        public void bind(Reminder r)  {
             mReminder = r;
             mCaptionTextView.setText(mReminder.getReminderName());
-            /*Date date=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse(mReminder.getReminderStartTime());
-            Log.d("Only Date", String.valueOf(date.getDate())); */
-            mTimeTextView.setText(mReminder.getReminderStartTime());
+            Date date=null;
+            try {
+                date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(mReminder.getReminderStartTime());
+                Log.d("Only Date", String.valueOf(date.getDate()));
+            }
+            catch(Exception e){
+
+            }
+            mTimeTextView.setText(String.valueOf(date.getDate()));
             mLocationTextView.setText(mReminder.getPlacename());
         }
 
@@ -105,8 +111,6 @@ public class ReminderListFragment extends Fragment
         public void onBindViewHolder(ReminderHolder holder, int position) {
             Reminder reminder = mReminders.get(position);
                 holder.bind(reminder);
-
-
         }
 
         @Override

@@ -77,14 +77,15 @@ public class ViewReminderFragment extends Fragment
 
 
         reminderName=view.findViewById(R.id.reminderName);
-
         reminderStartTime=view.findViewById(R.id.reminderStartTime);
         reminderEndTime=view.findViewById(R.id.reminderEndTime);
         placeAddress = view.findViewById(R.id.placeadd);
+        placename=view.findViewById(R.id.placename);
 
         reminderStartTime.setText(r.getReminderStartTime());
         reminderEndTime.setText(r.getReminderEndTime());
-        placeAddress.setText(r.getPlacename());
+        placename.setText(r.getPlacename());
+        placeAddress.setText(r.getPlaceaddress());
         reminderName.setText(r.getReminderName());
         auth= FirebaseAuth.getInstance();
         remindersDatabase = FirebaseDatabase.getInstance().getReference();
@@ -247,14 +248,20 @@ public class ViewReminderFragment extends Fragment
     private Date getDate(EditText e){
         Date rTime=new Date();
         if(!TextUtils.isEmpty(e.getText().toString())) {
+            Log.d("viewrem:","iside if");
             String datesAndTime[] = e.getText().toString().split("   ");
+            Log.d("viewrem:","1");
             String date[] = datesAndTime[0].toString().trim().split("/");
+            Log.d("viewrem:","2");
             String time[] = datesAndTime[1].toString().trim().split(":");
-            rTime.setYear(Integer.parseInt(date[2]));
+            Log.d("viewrem:","3");
+            //Log.d("viewrem: ",date[0]+" "+(date[1])+" "+date[3]+" "+time[0]+" "+time[1]);
+            rTime.setYear((Integer.parseInt(date[2])-1900));
             rTime.setDate(Integer.parseInt(date[0]));
             rTime.setMonth(Integer.parseInt(date[1]) - 1);
             rTime.setHours(Integer.parseInt(time[0]));
             rTime.setMinutes(Integer.parseInt(time[1]));
+            Log.d("viewrem:","4");
             return rTime;
         }
         return null;
@@ -271,8 +278,6 @@ public class ViewReminderFragment extends Fragment
                 placeAddress.setText(place.getAddress());
                 logitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
-
-
             }
         }
 
@@ -281,16 +286,25 @@ public class ViewReminderFragment extends Fragment
 
     public void editRemainder()
     {
-        SimpleDateFormat formatter=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        Date date=new Date();
+        Log.d("viewrem:","editReminder");
+
+        SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy   HH:mm");
         String rname=reminderName.getText().toString().trim();
-        String reminderEndDate=r.getReminderEndTime(),reminderStartDate=r.getReminderStartTime();
-       /*if(getDate(reminderStartTime) != null && getDate(reminderEndTime) != null ) {
+        String reminderEndDate=null,reminderStartDate=null;
+        Log.d("viewrem:","editReminder2");
+
+        if(getDate(reminderStartTime) != null && getDate(reminderEndTime) != null ) {
           reminderStartDate = formatter.format(getDate(reminderStartTime)).toString();
-           reminderEndDate = formatter.format(getDate(reminderEndTime)).toString();
-        }*/
+            reminderEndDate = formatter.format(getDate(reminderEndTime)).toString();
+            Log.d("viewrem:","editReminder3");
+
+        }
+        Log.d("viewrem:","editReminder4");
+
         String pname=placename.getText().toString().trim();
         String padd=placeAddress.getText().toString().trim();
+        Log.d("viewrem:","editReminder5");
+
         if(!TextUtils.isEmpty(rname) && !TextUtils.isEmpty(pname) && !TextUtils.isEmpty(padd) && reminderEndDate !=null && reminderStartDate != null) {
 
             String id= r.getKey();
