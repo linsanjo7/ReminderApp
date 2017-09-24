@@ -187,7 +187,7 @@ public class AddRemainder extends Fragment {
         DatePickerDialog.OnDateSetListener reminderOndateSetListener= new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                yearFinal=i-1900;
+                yearFinal=i;
                 monthFinal=i1+1;
                 dayFinal=i2;
 
@@ -210,7 +210,7 @@ public class AddRemainder extends Fragment {
         DatePickerDialog.OnDateSetListener reminderOndateSetListener= new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                yearFinal=i-1900;
+                yearFinal=i;
                 monthFinal=i1+1;
                 dayFinal=i2;
 
